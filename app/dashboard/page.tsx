@@ -16,6 +16,7 @@ import { FitnessProgress } from "@/components/fitness/progress-ring";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { OnboardingBanner } from "@/components/onboarding/OnboardingBanner";
 
 export default function DashboardPage() {
   const todayWorkouts = [
@@ -89,6 +90,9 @@ export default function DashboardPage() {
       </div>
 
       <div className="mobile-container py-6">
+        {/* Onboarding Banner */}
+        <OnboardingBanner />
+
         {/* Quick Stats - Mobile Optimized */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}

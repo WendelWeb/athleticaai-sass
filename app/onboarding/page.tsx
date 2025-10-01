@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { useCompleteOnboarding } from "@/hooks/useOnboardingStatus";
 import {
   ArrowRight,
   ArrowLeft,
@@ -64,7 +66,10 @@ const steps = [
 ];
 
 export default function OnboardingPage() {
+  const router = useRouter();
+  const { completeOnboarding } = useCompleteOnboarding();
   const [currentStep, setCurrentStep] = useState(0);
+  const [isCompleting, setIsCompleting] = useState(false);
   const [data, setData] = useState<OnboardingData>({
     age: "",
     gender: "",
@@ -107,10 +112,24 @@ export default function OnboardingPage() {
     }
   };
 
-  const handleComplete = () => {
-    // Save data and redirect to dashboard
-    console.log("Onboarding data:", data);
-    window.location.href = "/dashboard";
+  const handleComplete = async () => {
+    setIsCompleting(true);
+
+    try {
+      // Sauvegarder les données d'onboarding (optionnel)
+      console.log("Données d'onboarding:", data);
+
+      // Marquer l'onboarding comme complété
+      await completeOnboarding();
+
+      // Rediriger vers le dashboard
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("Erreur lors de la finalisation de l'onboarding:", error);
+      alert("Une erreur s'est produite. Veuillez réessayer.");
+    } finally {
+      setIsCompleting(false);
+    }
   };
 
   const progress = ((currentStep + 1) / steps.length) * 100;
@@ -205,12 +224,22 @@ export default function OnboardingPage() {
             </Button>
 
             <Button
-              variant="gradient"
+              variant="default"
               onClick={nextStep}
+              disabled={isCompleting}
               className="flex items-center"
             >
-              {currentStep === steps.length - 1 ? "Terminer" : "Suivant"}
-              <ArrowRight className="w-4 h-4 ml-2" />
+              {isCompleting ? (
+                <>
+                  <CheckCircle className="w-4 h-4 mr-2 animate-spin" />
+                  Finalisation...
+                </>
+              ) : (
+                <>
+                  {currentStep === steps.length - 1 ? "Terminer" : "Suivant"}
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </>
+              )}
             </Button>
           </div>
         </div>

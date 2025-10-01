@@ -9,6 +9,7 @@ import {
   DesktopSidebar,
 } from "@/components/navigation/mobile-nav";
 import { ClerkProvider } from "@clerk/nextjs";
+import { OnboardingGuard } from "@/components/onboarding/OnboardingGuard";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -123,7 +124,9 @@ export default function RootLayout({
                   <Navigation />
 
                   {/* Main Content */}
-                  <main className="flex-1 pb-20 lg:pb-0">{children}</main>
+                  <main className="flex-1 pb-20 lg:pb-0">
+                    <OnboardingGuard>{children}</OnboardingGuard>
+                  </main>
 
                   {/* Footer for landing pages */}
                   <Footer />

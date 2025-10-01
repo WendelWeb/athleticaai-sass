@@ -106,6 +106,7 @@ async function handleUserCreated(userData: ClerkWebhookEvent["data"]) {
       first_name: userData.first_name,
       last_name: userData.last_name,
       avatar_url: userData.image_url,
+      onboarding_completed: false, // Nouveau utilisateur = onboarding non complété
       created_at: new Date(userData.created_at).toISOString(),
       updated_at: new Date(userData.updated_at).toISOString(),
     })
